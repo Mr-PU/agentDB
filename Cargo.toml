@@ -1,0 +1,46 @@
+[package]
+name = "agentdb-runtime"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "agentdb_runtime"
+path = "src/lib.rs"
+
+[[bin]]
+name = "agentdb"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"
+libc = "0.2"
+async-trait = "0.1"
+reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls"] }
+# Official SDK for the Otari LLM gateway (https://github.com/mozilla-ai/otari),
+# used as an alternative to calling Anthropic directly — see src/diagnosis.rs's
+# LlmProvider::Otari. Pinned to 0.0.1, the version confirmed published on
+# crates.io/docs.rs at the time this was added (checked via web search, not
+# memory). Requires Rust 1.83+ per the crate's own rust-version — worth
+# checking first if `cargo build` fails on an older toolchain.
+otari = "0.0.1"
+axum = { version = "0.7", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "json"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+tower = { version = "0.4", features = ["util"] }
+
+# Real process-control (SIGTERM/SIGKILL) for the process.stop/process.start
+# action handlers in src/actions.rs, only when ACTIONS_DRY_RUN=false. Unix
+# only — this project targets Linux hosts; see src/actions.rs for the
+# #[cfg(not(unix))] fallback that keeps the crate compiling elsewhere.
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.27", features = ["signal"] }
