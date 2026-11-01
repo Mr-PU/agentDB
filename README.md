@@ -1,4 +1,6 @@
-# AgentDB Runtime — Phase 1 + Phase 2
+# AgentDB Runtime 
+
+![AgentDB dashboard](docs/agentdb-dashboard.svg)
 
 **Phase 1 — System State Mirror:** read-only mirror of live system state
 (processes, network connections, services) using osquery as the

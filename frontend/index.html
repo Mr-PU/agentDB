@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgentDB Control Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark">A</div>
+          <div>
+            <div class="eyebrow">Runtime</div>
+            <h1>AgentDB</h1>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button type="button" class="nav-item active" data-target="overview-section"><span>Overview</span></button>
+          <button type="button" class="nav-item" data-target="processes-section"><span>Processes</span></button>
+          <button type="button" class="nav-item" data-target="network-section"><span>Network</span></button>
+          <button type="button" class="nav-item" data-target="services-section"><span>Services</span></button>
+          <button type="button" class="nav-item" data-target="permissions-section"><span>Permissions</span></button>
+          <button type="button" class="nav-item" data-target="actions-section"><span>Actions</span></button>
+          <button type="button" class="nav-item" data-target="diagnostics-section"><span>Diagnostics</span></button>
+        </nav>
+
+        <div class="sidebar-panel">
+          <div class="panel-header">
+            <span class="status-dot"></span>
+            <strong>Runtime Status</strong>
+          </div>
+          <div id="runtimeState" class="chip ok">Connected</div>
+          <div id="uptimeText" class="mini-label">Uptime: --</div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar" id="overview-section">
+          <div class="hero-story">
+            <div class="eyebrow">Secure execution runtime</div>
+            <h2>AgentDB</h2>
+            <p class="hero-copy">
+              A policy-enforced execution layer for AI agents operating real infrastructure.
+              It limits blast radius, requires approval for sensitive actions, and leaves a
+              complete audit trail for every decision and operational change.
+            </p>
+          </div>
+          <div class="topbar-actions">
+            <button type="button" class="secondary-btn" id="demoToggleBtn">Demo mode</button>
+            <button type="button" class="primary-btn" id="refreshBtn">Refresh now</button>
+          </div>
+        </header>
+
+        <section class="hero-grid">
+          <div class="metric-card accent">
+            <div class="metric-label">Risk surface reduction</div>
+            <div class="metric-value" id="systemHealth">98.7%</div>
+            <div class="metric-meta">
+              <span class="metric-trend up" id="healthTrend">+1.2%</span>
+              <span>policy coverage</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Live agent scope</div>
+            <div class="metric-value" id="processCount">--</div>
+            <div class="metric-meta">
+              <span class="metric-trend neutral" id="procTrend">Controlled</span>
+              <span>infrastructure view</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Operational approvals</div>
+            <div class="metric-value" id="networkCount">--</div>
+            <div class="metric-meta">
+              <span class="metric-trend up" id="netTrend">+3</span>
+              <span>pending review</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Auditability</div>
+            <div class="metric-value" id="serviceCount">--</div>
+            <div class="metric-meta">
+              <span class="metric-trend down" id="svcTrend">100% logged</span>
+              <span>execution trail</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="narrative-row">
+          <div class="narrative-card feature-card">
+            <div class="eyebrow">Why it matters</div>
+            <h3>Infrastructure agents need access, but not unrestricted authority.</h3>
+            <p>
+              AgentDB creates a secure layer between autonomous systems and production resources.
+              It allows agents to observe, diagnose, and propose operational actions while ensuring
+              that sensitive changes still require policy checks, approvals, and real-time logging.
+            </p>
+          </div>
+
+          <div class="narrative-card feature-card">
+            <div class="eyebrow">Execution model</div>
+            <h3>Observe → authorize → execute → audit.</h3>
+            <p>
+              Every action flows through a permission engine. This transforms infrastructure automation
+              from a trust-based model into a governed execution system with explicit boundary controls.
+            </p>
+          </div>
+        </section>
+
+        <section class="content-grid">
+          <div class="panel panel-wide" id="processes-section">
+            <div class="panel-head">
+              <h3>Live infrastructure view</h3>
+              <div class="chip neutral" id="lastUpdated">Waiting...</div>
+            </div>
+            <div class="bars-wrap" id="pulseBars"></div>
+          </div>
+
+          <div class="panel" id="permissions-section">
+            <div class="panel-head">
+              <h3>Permission posture</h3>
+              <span class="pill success">Policy enforced</span>
+            </div>
+            <div class="ring-wrap">
+              <div class="ring" id="permissionRing">
+                <div class="ring-inner">
+                  <strong id="permissionPercent">96%</strong>
+                  <small>valid</small>
+                </div>
+              </div>
+              <div class="ring-legend">
+                <div><span class="legend-dot green"></span>Allowed</div>
+                <div><span class="legend-dot amber"></span>Review</div>
+                <div><span class="legend-dot red"></span>Denied</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="panel panel-large" id="processes-table-panel">
+            <div class="panel-head">
+              <h3>Live processes</h3>
+              <button type="button" class="ghost-btn">View all</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Process</th>
+                    <th>PID</th>
+                    <th>Owner</th>
+                    <th>CPU</th>
+                    <th>Memory</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="processTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel" id="actions-section">
+            <div class="panel-head">
+              <h3>Approval queue</h3>
+              <button type="button" class="ghost-btn">2 pending</button>
+            </div>
+            <div class="task-list" id="approvalList"></div>
+          </div>
+        </section>
+
+        <section class="dashboard-grid bottom-grid">
+          <div class="panel" id="network-section">
+            <div class="panel-head">
+              <h3>Network activity</h3>
+              <button type="button" class="ghost-btn">Live</button>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Remote</th>
+                    <th>Port</th>
+                    <th>Proto</th>
+                    <th>State</th>
+                  </tr>
+                </thead>
+                <tbody id="networkTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel" id="services-section">
+            <div class="panel-head">
+              <h3>Services</h3>
+              <button type="button" class="ghost-btn">Health</button>
+            </div>
+            <div class="service-stack" id="serviceStack"></div>
+          </div>
+
+          <div class="panel panel-large" id="diagnostics-section">
+            <div class="panel-head">
+              <h3>Runtime diagnostics</h3>
+              <button type="button" class="ghost-btn">Insights</button>
+            </div>
+            <div id="diagnosticList" class="diagnostic-list"></div>
+          </div>
+        </section>
+
+        <section class="settings-row">
+          <div class="panel settings-panel">
+            <div class="panel-head">
+              <h3>Connection settings</h3>
+            </div>
+            <div class="settings-grid">
+              <label>
+                <span>API URL</span>
+                <input id="apiUrlInput" type="text" value="http://localhost:8080" />
+              </label>
+              <label>
+                <span>API key</span>
+                <input id="apiKeyInput" type="password" placeholder="Enter API key" />
+              </label>
+              <label>
+                <span>Refresh interval</span>
+                <select id="intervalSelect">
+                  <option value="3000">3 seconds</option>
+                  <option value="5000" selected>5 seconds</option>
+                  <option value="10000">10 seconds</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel event-panel">
+            <div class="panel-head">
+              <h3>Recent activity</h3>
+            </div>
+            <div id="eventFeed" class="event-feed"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

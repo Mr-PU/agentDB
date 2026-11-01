@@ -8,9 +8,9 @@ use tokio::task::JoinHandle;
 use tokio_util::sync::CancellationToken;
 use tracing::{error, info, warn};
 
-const PROCESSES_QUERY: &str = "SELECT pid, name, username, state, user_time, system_time, resident_size, start_time FROM processes;";
+const PROCESSES_QUERY: &str = "SELECT pid, name, CAST(uid AS TEXT) AS username, state, user_time, system_time, resident_size, start_time FROM processes;";
 const SOCKETS_QUERY: &str = "SELECT pid, local_port, remote_address, remote_port, protocol, state FROM process_open_sockets WHERE remote_address != '';";
-const SERVICES_QUERY: &str = "SELECT name, status FROM systemd_units WHERE type = 'service';";
+const SERVICES_QUERY: &str = "SELECT id AS name, COALESCE(active_state, sub_state, load_state) AS status FROM systemd_units WHERE id LIKE '%.service' OR fragment_path LIKE '%.service';";
 
 use std::sync::OnceLock;
 
