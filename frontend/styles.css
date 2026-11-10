@@ -198,6 +198,12 @@ h3 {
   color: #86efac;
 }
 
+.chip.warning {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.26);
+  color: #fcd34d;
+}
+
 .chip.neutral {
   background: rgba(59, 130, 246, 0.08);
   color: #bfdbfe;
@@ -732,6 +738,101 @@ input::placeholder {
   margin: 0;
 }
 
+.demo-demo-panel {
+  padding: 22px 20px 18px;
+}
+
+.demo-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.demo-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(8, 16, 24, 0.5);
+  transition: all 0.2s ease;
+}
+
+.demo-step.active {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.12);
+}
+
+.demo-step.complete {
+  border-color: rgba(34, 197, 94, 0.32);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.step-index {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.12);
+  color: #dbeafe;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.demo-step strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+
+.demo-step small {
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.demo-result-panel {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(7, 16, 25, 0.82);
+  padding: 16px;
+}
+
+.demo-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+pre {
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(2, 6, 12, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.10);
+  color: #dbeafe;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.small-btn {
+  padding: 9px 14px;
+  font-size: 0.8rem;
+}
+
+.primary-btn:disabled {
+  opacity: 0.65;
+  cursor: progress;
+  transform: none;
+}
+
 @media (max-width: 1200px) {
   .hero-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -747,6 +848,10 @@ input::placeholder {
   .narrative-row {
     grid-template-columns: 1fr;
   }
+
+  .demo-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 880px) {
@@ -759,6 +864,12 @@ input::placeholder {
   }
 
   .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .demo-steps {
     grid-template-columns: 1fr;
   }
 }

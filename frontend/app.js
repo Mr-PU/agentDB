@@ -46,6 +46,10 @@ const els = {
   intervalSelect: document.getElementById('intervalSelect'),
   refreshBtn: document.getElementById('refreshBtn'),
   demoToggleBtn: document.getElementById('demoToggleBtn'),
+  runDemoBtn: document.getElementById('runDemoBtn'),
+  demoStatus: document.getElementById('demoStatus'),
+  demoOutput: document.getElementById('demoOutput'),
+  demoSteps: Array.from(document.querySelectorAll('.demo-step')),
 };
 
 function formatBytes(bytes) {
@@ -336,11 +340,148 @@ function wireControls() {
     }
     window.refreshTimer = setInterval(refreshDashboard, state.refreshIntervalMs);
   });
+
+  els.runDemoBtn.addEventListener('click', runSecureActionDemo);
+}
+
+function setDemoStatus(label, tone = 'neutral') {
+  els.demoStatus.textContent = label;
+  els.demoStatus.className = `chip ${tone}`;
+}
+
+function setDemoStage(index, payload) {
+  els.demoSteps.forEach((step, stepIndex) => {
+    step.classList.toggle('active', stepIndex === index);
+    step.classList.toggle('complete', stepIndex < index);
+  });
+
+  if (payload) {
+    els.demoOutput.textContent = JSON.stringify(payload, null, 2);
+  }
+}
+
+async function runSecureActionDemo() {
+  if (state.demoRunning) return;
+  state.demoRunning = true;
+  els.runDemoBtn.disabled = true;
+  els.runDemoBtn.textContent = 'Running demo...';
+
+  const request = {
+    action_id: 'act_2704',
+    actor: 'agent:ops-coordinator',
+    verb: 'process.start',
+    target: 'agentdb-demo-safe',
+    command: 'echo agentdb-demo-safe && sleep 1',
+    mode: 'dry-run',
+    risk: 'low',
+    requested_at: new Date().toISOString(),
+  };
+
+  const stages = [
+    {
+      index: 0,
+      label: 'Requested',
+      tone: 'neutral',
+      payload: {
+        status: 'submitted',
+        message: 'Action request created for a harmless demo process.',
+        action: request,
+      },
+    },
+    {
+      index: 1,
+      label: 'Permission checked',
+      tone: 'warning',
+      payload: {
+        status: 'permission_check',
+        message: 'Capability scope matches the approved policy boundary.',
+        policy: {
+          scope: 'agentdb:process:start',
+          resource: 'agentdb-demo-safe',
+          allowed: true,
+          grant: 'ops-coordinator.read/write:demo-safe',
+        },
+      },
+    },
+    {
+      index: 2,
+      label: 'Approved',
+      tone: 'ok',
+      payload: {
+        status: 'approval_gate',
+        message: 'Human approval recorded before execution.',
+        approval: {
+          approver: 'security-operator',
+          decision: 'approved',
+          approval_id: 'apr_8812',
+          reason: 'Harmless dry-run only; no production impact.',
+        },
+      },
+    },
+    {
+      index: 3,
+      label: 'Dry-run',
+      tone: 'warning',
+      payload: {
+        status: 'dry_run_execution',
+        message: 'Execution is intentionally simulated in dry-run mode.',
+        execution: {
+          mode: 'dry-run',
+          command: 'echo agentdb-demo-safe && sleep 1',
+          simulated_exit_code: 0,
+          dry_run: true,
+          started_at: new Date().toISOString(),
+        },
+      },
+    },
+    {
+      index: 4,
+      label: 'Complete',
+      tone: 'ok',
+      payload: {
+        status: 'complete',
+        mode: 'dry-run',
+        message: 'The runtime emitted a structured result without changing real infrastructure.',
+        result: {
+          action_id: 'act_2704',
+          final_state: 'accepted',
+          audit_trail: 'persisted',
+          risk_level: 'low',
+          dry_run: true,
+          output: {
+            stdout: 'agentdb-demo-safe',
+            stderr: '',
+            exit_code: 0,
+          },
+        },
+      },
+    },
+  ];
+
+  for (const stage of stages) {
+    setDemoStage(stage.index, stage.payload);
+    setDemoStatus(stage.label, stage.tone);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+  }
+
+  els.runDemoBtn.disabled = false;
+  els.runDemoBtn.textContent = 'Run secure demo';
+  state.demoRunning = false;
+}
+
+function renderDemoInteraction() {
+  setDemoStage(0, {
+    status: 'ready',
+    mode: 'dry-run',
+    message: 'Press "Run secure demo" to walk through the approval flow.',
+  });
+  setDemoStatus('Ready', 'neutral');
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   wireControls();
   renderEvents();
+  renderDemoInteraction();
   refreshDashboard();
   window.refreshTimer = setInterval(refreshDashboard, state.refreshIntervalMs);
 });

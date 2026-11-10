@@ -28,6 +28,7 @@
           <button type="button" class="nav-item" data-target="permissions-section"><span>Permissions</span></button>
           <button type="button" class="nav-item" data-target="actions-section"><span>Actions</span></button>
           <button type="button" class="nav-item" data-target="diagnostics-section"><span>Diagnostics</span></button>
+          <button type="button" class="nav-item" data-target="workflow-section"><span>Demo flow</span></button>
         </nav>
 
         <div class="sidebar-panel">
@@ -213,6 +214,63 @@
               <button type="button" class="ghost-btn">Insights</button>
             </div>
             <div id="diagnosticList" class="diagnostic-list"></div>
+          </div>
+        </section>
+
+        <section class="demo-demo-panel panel" id="workflow-section">
+          <div class="panel-head">
+            <h3>Secure action workflow</h3>
+            <button type="button" class="primary-btn small-btn" id="runDemoBtn">Run secure demo</button>
+          </div>
+
+          <div class="demo-steps">
+            <div class="demo-step active">
+              <span class="step-index">1</span>
+              <div>
+                <strong>Submit action request</strong>
+                <small>Harmless simulated process start, dry-run only</small>
+              </div>
+            </div>
+            <div class="demo-step">
+              <span class="step-index">2</span>
+              <div>
+                <strong>Permission check</strong>
+                <small>Grant is validated against the capability scope</small>
+              </div>
+            </div>
+            <div class="demo-step">
+              <span class="step-index">3</span>
+              <div>
+                <strong>Approval gate</strong>
+                <small>Human approval required before execution</small>
+              </div>
+            </div>
+            <div class="demo-step">
+              <span class="step-index">4</span>
+              <div>
+                <strong>Dry-run execution</strong>
+                <small>Action is executed in simulation mode only</small>
+              </div>
+            </div>
+            <div class="demo-step">
+              <span class="step-index">5</span>
+              <div>
+                <strong>Structured result</strong>
+                <small>Outcome captured in JSON for audit and review</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-result-panel">
+            <div class="demo-header-row">
+              <strong>Execution trace</strong>
+              <span id="demoStatus" class="chip neutral">Ready</span>
+            </div>
+            <pre id="demoOutput">{
+  "status": "ready",
+  "mode": "dry-run",
+  "message": "Press \"Run secure demo\" to walk through the approval flow."
+}</pre>
           </div>
         </section>
 
